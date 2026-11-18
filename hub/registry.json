@@ -1,0 +1,44 @@
+{
+  "_doc": "Every OpsDesk tenant Meridian runs. Identifiers only, never credentials. Add a tenant here as step 4 of the new-tenant policy.",
+  "core_repo": "../meridian-ai-operations-desk",
+  "tenants": [
+    {
+      "key": "amp",
+      "name": "Amp Fitness",
+      "repo": "../opsdesk-tenant-amp",
+      "owner": "Meridian Growth",
+      "stages": {
+        "sandbox": {"account": "637423233486", "region": "us-east-1", "url": "", "role_arn": ""},
+        "production": {"account": "637423233486", "region": "us-east-1",
+                       "url": "https://gn37xybc2e46vn2wpxjlm4o4di0vbpvg.lambda-url.us-east-1.on.aws", "role_arn": ""}
+      }
+    }
+  ],
+  "_doc_deployments": "Read by the Meridian Product Hub (core hub/collect.py and hub/build.py; format in core hub/registry.example.json).",
+  "deployments": [
+    {
+      "key": "amp-production", "product": "OpsDesk", "customer": "Amp Fitness", "tenant": "amp", "stage": "production",
+      "url": "https://gn37xybc2e46vn2wpxjlm4o4di0vbpvg.lambda-url.us-east-1.on.aws", "region": "us-east-1", "account": "637423233486",
+      "function": "meridian-opsdesk-amp-production", "bucket": "meridian-opsdesk-amp-production-637423233486",
+      "ecr_repository": "meridian/opsdesk/production", "rds_instance": "meridian-opsdesk-amp-production",
+      "core": "core-v0.2.0", "budget_usd": 25, "error_warn_per_day": 20
+    },
+    {
+      "key": "amp-sandbox", "product": "OpsDesk", "customer": "Amp Fitness", "tenant": "amp", "stage": "sandbox",
+      "url": "https://3f6gsdqkrb6ngeh47ylswl4hhy0opbdo.lambda-url.us-east-1.on.aws", "region": "us-east-1", "account": "637423233486",
+      "function": "meridian-opsdesk-amp-sandbox", "bucket": "meridian-opsdesk-amp-sandbox-637423233486",
+      "ecr_repository": "meridian/opsdesk/sandbox", "core": "core-v0.2.1", "budget_usd": 2, "idle": true, "idle_monthly_usd": 1.0,
+      "notes": [{"severity": "Info", "title": "Resolved: sandbox idle since v1.6",
+                 "detail": "No schedule, no keep-warm ping, scheduled pipelines off, no retries. The timeouts before 2026-11-18 were the one-time Salesforce migration runs.",
+                 "since": "2026-11-18"}]
+    }
+  ],
+  "repositories": [
+    {"repo": "meridian-ai-operations-desk", "role": "Core platform", "customer": "All customers",
+     "url": "https://github.com/sid-meridiangrowth/meridian-ai-operations-desk", "branch": "main", "release": "core-v0.2.1",
+     "note": "Generic OpsDesk code, no customer data; tested on a fictional demo customer"},
+    {"repo": "opsdesk-tenant-amp", "role": "Customer code", "customer": "Amp Fitness", "url": "https://github.com/sid-meridiangrowth/opsdesk-tenant-amp",
+     "branch": "production", "release": "v1.33 (production) · v1.6 (sandbox)", "core_pin": "core-v0.2.1",
+     "note": "Amp settings, plugin (Salesforce migration, firmware, repairs) and tests; core as a submodule"}
+  ]
+}
